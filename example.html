@@ -1,0 +1,69 @@
+<head>
+    <style>
+        /*CSS Map*/
+        #map {
+        height: 100%;
+        }
+
+        html,
+        body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    </style>
+</head>
+<body>
+    <!-- Mapa -->
+    <div id="map"></div>
+
+    <!-- Importa JQuery e Maps -->
+    <script async defer src="http://maps.google.com/maps/api/js?sensor=false&libraries=geometry" type="text/javascript"></script>   
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.js" integrity="sha256-DrT5NfxfbHvMHux31Lkhxg42LY6of8TaYyK50jnxRnM=" crossorigin="anonymous"></script>
+    
+    <!-- Importa o script criado para gerar as posições que contemplam o setor circular -->
+    <script type="text/javascript" src="setorcircular.js"></script>
+
+    <script>
+
+        $(document).ready(function(){
+
+            var map = null;
+
+            /*Iniciar o google maps*/
+            initMap = () => {
+                map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 18,
+                    center: {
+                    lat: -21.831157,
+                    lng: -46.893412
+                    },
+                });
+                
+            }
+
+            //Chama função que inicia o google maps
+            initMap();
+
+            //Criar o objeto
+            const setor = new SetorCircular();
+            //Obtém as posições de acordo com as informações passadas
+            const posicoes = setor.ObterPosicoes(-21.831157, -46.893412, 45, 60, 100);
+
+            //Cria um poligono utilizando as posições obtidas
+            var poligono = new google.maps.Polygon({
+                paths: posicoes,
+                strokeColor: '#FF0000',
+                strokeOpacity: 1,
+                strokeWeight: 2,
+                fillColor: '#FF0000',
+                fillOpacity: 0.35
+            });
+            
+            //Adiciona poligono no mapa
+            poligono.setMap(map);
+
+        });
+
+    </script>
+</body>
